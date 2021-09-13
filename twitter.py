@@ -8,8 +8,8 @@ import tweepy
 
 class Twitter:
     def __init__(self):
-        self.auth = tweepy.OAuthHandler("", "")
-        self.auth.set_access_token("", "")
+        self.auth = tweepy.OAuthHandler("IGWNiyjPK2LzqeuMLdAfEknbz", "R0leI2rWC80Yu2xbs9yemukk9eDuy8KLSyBfMa1zq0ySt8RrJ8")
+        self.auth.set_access_token("1432781960951304192-5f6wPKBg2a6kYfcbi1BoiZy779p561", "9eOI0afRTcEcZVJ1hGDpUGLy0B0S4D4WLaGwqBMw9xEp4")
         self.api = tweepy.API(self.auth, wait_on_rate_limit=True, wait_on_rate_limit_notify=True)
 
     def _meet_basic_tweet_requirements(self):
