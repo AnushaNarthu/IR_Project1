@@ -24,22 +24,77 @@ class Twitter:
         
         raise NotImplementedError
 
-    def get_tweets_by_poi_screen_name(self,screen,cnt):
+    def get_tweets_by_poi_screen_name(self, poi_screenname,cnt):
         '''
         Use user_timeline api to fetch POI related tweets, some postprocessing may be required.
         :return: List
         '''
-        #user_timeline = self.api.user_timeline(screen_name= screen, count = cnt)
-        """
+        #max_tweets=150
+        c = 0
+        d = 0
+        oldest_id = None
         tweets_data = []
-        search = "COVID"
-        for status in tweepy.Cursor(self.api.search,q = search,screen_name = screen).items(5):
-            print(status.user.screen_name)
-            print(status.text)
+        
+        while d < 801 :
+            tweets = self.api.user_timeline(id =poi_screenname, count =100, max_id = oldest_id,tweet_mode='extended',)
+            #print(len(tweets))
+            for tweet in tweets:
+                
+                if re.search("RT",  tweet.full_text):
+                   continue
+                single_tweet = {}
+                d = d+1
 
-        """
-        return
-        #raise NotImplementedError
+                single_tweet["id"] = str(tweet.id)
+                single_tweet["verified"] = tweet.user.verified
+                single_tweet["poi_name"] = tweet.user.screen_name
+                single_tweet["poi_id"] = tweet.user.id
+                if tweet.lang == "en":
+                    single_tweet["country"] = "USA"
+                elif tweet.lang  == "hi":
+                    single_tweet["country"] =  "INDIA"
+                else:
+                    single_tweet["country"] = "MEXICO"
+                single_tweet["tweet_text"] = tweet.full_text
+                single_tweet["tweet_lang"] = tweet.lang
+
+
+                x = tweet.entities
+                y = x['hashtags']
+                count_hashtags = len(y)
+                all_hashtags = []
+                if count_hashtags>0:
+                    for hashtag in y:
+                        hash_text = hashtag['text']
+                        all_hashtags.append(hash_text)
+
+                single_tweet["hashtags"] = all_hashtags
+                
+                date_str = parse(str(tweet.created_at))
+                time_obj = date_str.replace(second=0, microsecond=0, minute=0, hour=date_str.hour) + timedelta(
+                hours=date_str.minute // 30)
+                date_str = datetime.datetime.strftime(time_obj, '%Y-%m-%d %H:%M:%S')
+
+                #single_tweet["tweet_date"]= status.created_at.strftime("%y-%m-%dT%H:%M:%SZ")
+                #single_tweet["tweet_date"]= str(status.created_at)
+                single_tweet["tweet_date"] = date_str
+                tweets_data.append(single_tweet)
+                
+                
+                covid_list = ["covid", "vaccine", "quarantine", "masks","covid19","casos","ventilator","quarantine","salud","vaccines","vacuna","COVID-19"]
+               
+                if any(word in tweet.full_text for word in covid_list):
+                    # d= d-1                  
+                    c= c+1
+                tweetid =tweet.id
+            oldest_id = tweetid
+           
+
+        print("covid",c)
+        print("count",d)
+        return tweets_data
+       
+     #  raise NotImplementedError
 
     def get_tweets_by_lang_and_keyword(self,key_count,key_name,key_lang):
         '''
@@ -48,51 +103,53 @@ class Twitter:
         '''
 
         tweets_data = []
-        #key_name = "टीकाकरण"
-        #key_lang = "hi"
-    
-        for status in tweepy.Cursor(self.api.search,q = key_name, lang = key_lang).items(100):
-            #print(status)
-            #status_dict = dict(vars(status))
-            #keys = status_dict.keys()
-            #for k in keys:
-                #print(k)
-            #    single_tweet[k] = status_dict[k]
-            #user_dict = dict(vars(status_dict['user']))
-            single_tweet = {}
-            single_tweet["id"] = str(status.id)
-            single_tweet["verified"] = status.user.verified
-            if key_lang == "en":
-                single_tweet["country"] = "USA"
-            elif key_lang == "hi":
-                single_tweet["country"] =  "INDIA"
-            else:
-                single_tweet["country"] = "MEXICO"
-            single_tweet["tweet_text"] = status.text
-            single_tweet["tweet_lang"] = key_lang
+        cnt = 0
+        while cnt < 1000 :
+            for status in tweepy.Cursor(self.api.search,q = key_name, lang = key_lang).items(100):
+                #print(status)
+                #status_dict = dict(vars(status))
+                #keys = status_dict.keys()
+                #for k in keys:
+                    #print(k)
+                #    single_tweet[k] = status_dict[k]
+                #user_dict = dict(vars(status_dict['user']))
+                single_tweet = {}
+                if re.search("RT",  status.text):
+                    continue
+                cnt = cnt+1
+                single_tweet["id"] = str(status.id)
+                single_tweet["verified"] = status.user.verified
+                if key_lang == "en":
+                    single_tweet["country"] = "USA"
+                elif key_lang == "hi":
+                    single_tweet["country"] =  "INDIA"
+                else:
+                    single_tweet["country"] = "MEXICO"
+                single_tweet["tweet_text"] = status.text
+                single_tweet["tweet_lang"] = key_lang
 
-            
-            
-            x = status.entities
-            y = x['hashtags']
-            count_hashtags = len(y)
-            all_hashtags = []
-            if count_hashtags>0:
-                for hashtag in y:
-                    hash_text = hashtag['text']
-                    all_hashtags.append(hash_text)
+                
+                
+                x = status.entities
+                y = x['hashtags']
+                count_hashtags = len(y)
+                all_hashtags = []
+                if count_hashtags>0:
+                    for hashtag in y:
+                        hash_text = hashtag['text']
+                        all_hashtags.append(hash_text)
 
-            single_tweet["hashtags"] = all_hashtags
-            
-            date_str = parse(str(status.created_at))
-            time_obj = date_str.replace(second=0, microsecond=0, minute=0, hour=date_str.hour) + timedelta(
-            hours=date_str.minute // 30)
-            date_str = datetime.datetime.strftime(time_obj, '%Y-%m-%d %H:%M:%S')
+                single_tweet["hashtags"] = all_hashtags
+                
+                date_str = parse(str(status.created_at))
+                time_obj = date_str.replace(second=0, microsecond=0, minute=0, hour=date_str.hour) + timedelta(
+                hours=date_str.minute // 30)
+                date_str = datetime.datetime.strftime(time_obj, '%Y-%m-%d %H:%M:%S')
 
-            #single_tweet["tweet_date"]= status.created_at.strftime("%y-%m-%dT%H:%M:%SZ")
-            #single_tweet["tweet_date"]= str(status.created_at)
-            single_tweet["tweet_date"] = date_str
-            tweets_data.append(single_tweet)
+                #single_tweet["tweet_date"]= status.created_at.strftime("%y-%m-%dT%H:%M:%SZ")
+                #single_tweet["tweet_date"]= str(status.created_at)
+                single_tweet["tweet_date"] = date_str
+                tweets_data.append(single_tweet)
 
 
         return tweets_data
@@ -101,14 +158,14 @@ class Twitter:
         
         #print(tweets_data)
         #raise NotImplementedError
-
-    def get_replies(self):
+        
+  
+    def get_replies(self, query, max_id ):
         '''
         Get replies for a particular tweet_id, use max_id and since_id.
         For more info: https://developer.twitter.com/en/docs/twitter-api/v1/tweets/timelines/guides/working-with-timelines
         :return: List
         '''
-        
-
-
+        replies = self.api.search(q= query, since_id =max_id, count =1000)
+        return replies
         raise NotImplementedError
