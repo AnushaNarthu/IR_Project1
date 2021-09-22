@@ -28,7 +28,7 @@ def create_core(core=CORE_NAME):
 
 
 class Indexer:
-    def __init__(self):
+    def _init_(self):
         self.solr_url = f'http://{AWS_IP}:8983/solr/'
         self.connection = pysolr.Solr(self.solr_url + CORE_NAME, always_commit=True, timeout=5000000)
 
@@ -53,7 +53,7 @@ class Indexer:
                 },
                 {
                     "name": "poi_id",
-                    "type": "plongs",
+                    "type": "plong",
                     "multiValued": False
                 },
                 {
@@ -66,14 +66,14 @@ class Indexer:
                     "type": "string",
                     "multiValued": False
                 }, 
-                {
-                    "name": "id",
-                    "type": "string",
-                    "multiValued": False
-                },
+                #{
+                #    "name": "id",
+                #    "type": "string",
+                #    "multiValued": False
+                #},
                 {
                     "name": "replied_to_tweet_id",
-                    "type": "plongs",
+                    "type": "plong",
                     "multiValued": False
                 },
                 {
@@ -92,7 +92,17 @@ class Indexer:
                     "multiValued": False
                 },
                 {
-                    "name": "text_xx",
+                    "name": "text_hi",
+                    "type": "string",
+                    "multiValued": False
+                },
+                {
+                    "name": "text_en",
+                    "type": "string",
+                    "multiValued": False
+                },
+                {
+                    "name": "text_es",
                     "type": "string",
                     "multiValued": False
                 },
@@ -123,16 +133,17 @@ class Indexer:
                 },
                 {
                     "name": "geolocation",
-                    # "type": "plongs",
-                    "multiValued": False
+                    "type": "string",
+                    "multiValued": True
                 },
             ]
-        }        
-        
+        }
+        print(requests.post(self.solr_url + CORE_NAME + "/schema", json=data).json())
         #raise NotImplementedError
 
 
-if __name__ == "__main__":
+if _name_ == "_main_":
     i = Indexer()
     i.do_initial_setup()
     i.add_fields()
+    #i.create_documents([{"poi_name": "adnan sami","poi_id": 123}])
