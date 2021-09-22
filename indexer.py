@@ -129,7 +129,7 @@ class Indexer:
             ]
         }        
         
-        raise NotImplementedError
+        #raise NotImplementedError
 
 
 if __name__ == "__main__":
