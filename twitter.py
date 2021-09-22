@@ -58,7 +58,7 @@ class Twitter:
                 if (tweet.in_reply_to_status_id_str==tweet.id):
                     replies.append(tweet)
         return results
-        raise NotImplementedError
+        #raise NotImplementedError
 
 
     def get_tweets_by_lang_and_keyword(self, name):
@@ -90,7 +90,7 @@ class Twitter:
         results.extend(replies_result)
         print( len(replies_result))
         return results
-        raise NotImplementedError
+        #raise NotImplementedError
 
     def get_replies(self, query, max_id ):
         '''
@@ -100,4 +100,4 @@ class Twitter:
         '''
         replies = self.api.search(q= query, since_id =max_id, count =1000)
         return replies
-        raise NotImplementedError
+        #raise NotImplementedError
