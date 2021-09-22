@@ -38,7 +38,7 @@ def main():
     keywords = [
     {
       "id": 1,
-      "name": "covid vaccine",
+      "name": "covid positive",
       "count": 5,
       "lang": "en",
       "country": "USA",
@@ -46,7 +46,7 @@ def main():
     },
     {
       "id": 2,
-      "name": "vaccines",
+      "name": "face mask",
       "count": 5,
       "lang": "en",
       "country": "USA",
@@ -62,7 +62,7 @@ def main():
     },
     {
       "id": 3,
-      "name": "ventilator",
+      "name": "wuhan",
       "count": 5,
       "lang": "en",
       "country": "USA",
@@ -70,7 +70,7 @@ def main():
     },
     {
       "id": 3,
-      "name": "homequarantine",
+      "name": "disease",
       "count": 5,
       "lang": "en",
       "country": "USA",
