@@ -138,7 +138,7 @@ class Indexer:
                 },
             ]
         }
-        print(requests.post(self.solr_url + CORE_NAME + "/schema", json=data).json())
+        
         #raise NotImplementedError
 
 if __name__ == "__main__":
