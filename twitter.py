@@ -4,6 +4,7 @@ Institute: University at Buffalo
 '''
 
 import tweepy
+import re
 
 
 class Twitter:
