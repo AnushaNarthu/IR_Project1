@@ -11,7 +11,7 @@ import requests
 
 
 CORE_NAME = "IRF21P1"
-AWS_IP = "localhost"
+AWS_IP = "ubuntu@http://ec2-18-222-126-104.us-east-2.compute.amazonaws.com:8983/solr"
 
 
 # [CAUTION] :: Run this script once, i.e. during core creation
@@ -44,6 +44,91 @@ class Indexer:
         Define all the fields that are to be indexed in the core. Refer to the project doc for more details
         :return:
         '''
+        data = {
+            "add-field": [
+                {
+                    "name": "poi_name",
+                    "type": "string",
+                    "multiValued": False
+                },
+                {
+                    "name": "poi_id",
+                    "type": "plongs",
+                    "multiValued": False
+                },
+                {
+                    "name": "verified",
+                    "type": "bool",
+                    "multiValued": False
+                },
+                {
+                    "name": "country",
+                    "type": "string",
+                    "multiValued": False
+                }, 
+                {
+                    "name": "id",
+                    "type": "string",
+                    "multiValued": False
+                },
+                {
+                    "name": "replied_to_tweet_id",
+                    "type": "plongs",
+                    "multiValued": False
+                },
+                {
+                    "name": "reply_text",
+                    "type": "text_general",
+                    "multiValued": False
+                },
+                {
+                    "name": "tweet_text",
+                    "type": "text_general",
+                    "multiValued": False
+                },
+                {
+                    "name": "tweet_lang",
+                    "type": "string",
+                    "multiValued": False
+                },
+                {
+                    "name": "text_xx",
+                    "type": "string",
+                    "multiValued": False
+                },
+                {
+                    "name": "hashtags",
+                    "type": "string",
+                    "multiValued": True
+                },
+                {
+                    "name": "mentions",
+                    "type": "string",
+                    "multiValued": True
+                },
+                {
+                    "name": "tweet_urls",
+                    "type": "string",
+                    "multiValued": True
+                },
+                {
+                    "name": "tweet_emoticons",
+                    "type": "string",
+                    "multiValued": True
+                },
+                {
+                    "name": "tweet_date",
+                    "type": "pdate",
+                    "multiValued": False
+                },
+                {
+                    "name": "geolocation",
+                    # "type": "plongs",
+                    "multiValued": False
+                },
+            ]
+        }        
+        
         raise NotImplementedError
 
 
