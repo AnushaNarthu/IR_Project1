@@ -11,7 +11,7 @@ import requests
 
 
 CORE_NAME = "IRF21P1"
-AWS_IP = "ubuntu@http://ec2-18-222-126-104.us-east-2.compute.amazonaws.com:8983/solr"
+AWS_IP = "localhost"
 
 
 # [CAUTION] :: Run this script once, i.e. during core creation
