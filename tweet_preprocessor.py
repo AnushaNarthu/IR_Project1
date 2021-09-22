@@ -60,7 +60,7 @@ class TWPreprocessor:
             data.update(temp1)
         #print(data)
         return data
-        raise NotImplementedError
+        #raise NotImplementedError
 
 
 def _get_entities(tweet, type=None):
