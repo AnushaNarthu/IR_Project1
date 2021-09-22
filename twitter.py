@@ -18,87 +18,95 @@ class Twitter:
         Add basic tweet requirements logic, like language, country, covid type etc.
         :return: boolean
         '''
+        
+        
         raise NotImplementedError
 
-    def get_tweets_by_poi_screen_name(self, poi_screenname):
+    def get_tweets_by_poi_screen_name(self,screen,cnt):
         '''
         Use user_timeline api to fetch POI related tweets, some postprocessing may be required.
         :return: List
         '''
-        #max_tweets=150
-        c = 0
-        oldest_id = None
-        covid_tweets=[]
-        while c <50 :
-            tweets = self.api.user_timeline(id =poi_screenname, count =500, max_id = oldest_id,tweet_mode='extended',)
-            #print(len(tweets))
-            for tweet in tweets:
-                if re.search("COVID", tweet.full_text):
-                    c =c+1
-                    covid_tweets.append(tweet)
-                tweetid =tweet.id
-            oldest_id = tweetid
-        print("covid",c)
+        #user_timeline = self.api.user_timeline(screen_name= screen, count = cnt)
+        """
+        tweets_data = []
+        search = "COVID"
+        for status in tweepy.Cursor(self.api.search,q = search,screen_name = screen).items(5):
+            print(status.user.screen_name)
+            print(status.text)
 
-        results=[]
-        tweet_replies =[]
-        for tweet in tweets:
-            reply_max_id = tweet.id
-            replies = self.get_replies("to:{}".format(poi_screenname), reply_max_id)
-            replies_for_tweet=[]
-            for reply in replies :
-                if reply.in_reply_to_status_id == tweet.id:
-                    replies_for_tweet.append(reply)
-            tweet_replies.extend(replies_for_tweet)
-            #reply_max_id = replies[-1].id
-            replies.append(tweet)
-        results.extend(tweet_replies)
-        print( "replies count ", len(tweet_replies))
-        for tweet in tweepy.Cursor(self.api.search,q='to:'+screenname, result_type='recent', timeout=999999).items(1000):
-            if hasattr(tweet, 'in_reply_to_status_id_str'):
-                if (tweet.in_reply_to_status_id_str==tweet.id):
-                    replies.append(tweet)
-        return results
+        """
+        return
         #raise NotImplementedError
 
-
-    def get_tweets_by_lang_and_keyword(self, name):
+    def get_tweets_by_lang_and_keyword(self,key_count,key_name,key_lang):
         '''
         Use search api to fetch keywords and language related tweets, use tweepy Cursor.
         :return: List
         '''
-        max_tweets=200
-        #text_query = 'carona virus'
-        tweets_keyword = self.api.search(q=name,tweet_mode='extended', count= max_tweets)
 
-        results =[]
-        replies_result=[]
-        invalid =0
-        tweet_count =0
-        max_id =None
-        for tweet in tweets_keyword:
-            tweet_count =+1
-            replies = self.get_replies("to:{}".format(tweet.user.screen_name)+ "filter:replies", None, tweet._json['id'])
-            replies_for_current_tweet =[ ]
-            for reply in replies:
-                if reply.reply.in_reply_to_status_id == tweet.id :
-                    replies_for_current_tweet.append(reply)
-                else :
-                    invalid +=1
-            replies_result.extend(replies_for_current_tweet)
-            results.append(tweet)
-        print(tweet_count, "tweet_count")
-        results.extend(replies_result)
-        print( len(replies_result))
-        return results
+        tweets_data = []
+        #key_name = "टीकाकरण"
+        #key_lang = "hi"
+    
+        for status in tweepy.Cursor(self.api.search,q = key_name, lang = key_lang).items(100):
+            #print(status)
+            #status_dict = dict(vars(status))
+            #keys = status_dict.keys()
+            #for k in keys:
+                #print(k)
+            #    single_tweet[k] = status_dict[k]
+            #user_dict = dict(vars(status_dict['user']))
+            single_tweet = {}
+            single_tweet["id"] = str(status.id)
+            single_tweet["verified"] = status.user.verified
+            if key_lang == "en":
+                single_tweet["country"] = "USA"
+            elif key_lang == "hi":
+                single_tweet["country"] =  "INDIA"
+            else:
+                single_tweet["country"] = "MEXICO"
+            single_tweet["tweet_text"] = status.text
+            single_tweet["tweet_lang"] = key_lang
+
+            
+            
+            x = status.entities
+            y = x['hashtags']
+            count_hashtags = len(y)
+            all_hashtags = []
+            if count_hashtags>0:
+                for hashtag in y:
+                    hash_text = hashtag['text']
+                    all_hashtags.append(hash_text)
+
+            single_tweet["hashtags"] = all_hashtags
+            
+            date_str = parse(str(status.created_at))
+            time_obj = date_str.replace(second=0, microsecond=0, minute=0, hour=date_str.hour) + timedelta(
+            hours=date_str.minute // 30)
+            date_str = datetime.datetime.strftime(time_obj, '%Y-%m-%d %H:%M:%S')
+
+            #single_tweet["tweet_date"]= status.created_at.strftime("%y-%m-%dT%H:%M:%SZ")
+            #single_tweet["tweet_date"]= str(status.created_at)
+            single_tweet["tweet_date"] = date_str
+            tweets_data.append(single_tweet)
+
+
+        return tweets_data
+            
+
+        
+        #print(tweets_data)
         #raise NotImplementedError
 
-    def get_replies(self, query, max_id ):
+    def get_replies(self):
         '''
         Get replies for a particular tweet_id, use max_id and since_id.
         For more info: https://developer.twitter.com/en/docs/twitter-api/v1/tweets/timelines/guides/working-with-timelines
         :return: List
         '''
-        replies = self.api.search(q= query, since_id =max_id, count =1000)
-        return replies
-        #raise NotImplementedError
+        
+
+
+        raise NotImplementedError
