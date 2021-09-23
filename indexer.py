@@ -3,11 +3,6 @@
 Institute: University at Buffalo
 '''
 
-'''
-@author: Souvik Das
-Institute: University at Buffalo
-'''
-
 import os
 import pysolr
 import requests
@@ -33,7 +28,7 @@ def create_core(core=CORE_NAME):
 
 
 class Indexer:
-    def __init__(self):
+    def _init_(self):
         self.solr_url = f'http://{AWS_IP}:8983/solr/'
         self.connection = pysolr.Solr(self.solr_url + CORE_NAME, always_commit=True, timeout=5000000)
 
@@ -49,7 +44,7 @@ class Indexer:
         Define all the fields that are to be indexed in the core. Refer to the project doc for more details
         :return:
         '''
-        data= {
+        data = {
             "add-field": [
                 {
                     "name": "poi_name",
@@ -60,7 +55,8 @@ class Indexer:
                     "name": "poi_id",
                     "type": "plong",
                     "multiValued": False
-                }, {
+                },
+                {
                     "name": "verified",
                     "type": "boolean",
                     "multiValued": False
@@ -71,15 +67,22 @@ class Indexer:
                     "multiValued": False
                 },
                 {
+                    "name": "replied_to_user_id",
+                    "type": "plong",
+                    "multiValued": False
+
+                },
+                #{
+                #    "name": "id",
+                #    "type": "string",
+                #    "multiValued": False
+                #},
+                {
                     "name": "replied_to_tweet_id",
                     "type": "plong",
                     "multiValued": False
                 },
                 {
-                    "name": "replied_to_user_id",
-                    "type": "plong",
-                    "multiValued": False
-                }, {
                     "name": "reply_text",
                     "type": "text_general",
                     "multiValued": False
@@ -95,16 +98,16 @@ class Indexer:
                     "multiValued": False
                 },
                 {
-                    "name": "text_en",
-                    "type": "text_en",
-                    "multiValued": False
-                },
-                                {
                     "name": "text_hi",
                     "type": "text_hi",
                     "multiValued": False
                 },
-                                {
+                {
+                    "name": "text_en",
+                    "type": "text_en",
+                    "multiValued": False
+                },
+                {
                     "name": "text_es",
                     "type": "text_es",
                     "multiValued": False
@@ -113,7 +116,8 @@ class Indexer:
                     "name": "hashtags",
                     "type": "string",
                     "multiValued": True
-                }, {
+                },
+                {
                     "name": "mentions",
                     "type": "string",
                     "multiValued": True
@@ -137,11 +141,11 @@ class Indexer:
                     "name": "geolocation",
                     "type": "string",
                     "multiValued": True
-                }
+                },
             ]
         }
         print(requests.post(self.solr_url + CORE_NAME + "/schema", json=data).json())
-
+        #raise NotImplementedError
 
 
 if __name__ == "__main__":
