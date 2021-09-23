@@ -34,16 +34,14 @@ class Twitter:
         d = 0
         oldest_id = None
         tweets_data = []
-        
         while d < 801 :
             tweets = self.api.user_timeline(id =poi_screenname, count =100, max_id = oldest_id,tweet_mode='extended',)
             #print(len(tweets))
             for tweet in tweets:
-                
-                if re.search("RT",  tweet.full_text):
-                   continue
                 single_tweet = {}
                 d = d+1
+                
+                
 
                 single_tweet["id"] = str(tweet.id)
                 single_tweet["verified"] = tweet.user.verified
@@ -67,31 +65,45 @@ class Twitter:
                     for hashtag in y:
                         hash_text = hashtag['text']
                         all_hashtags.append(hash_text)
-
-                single_tweet["hashtags"] = all_hashtags
+                    single_tweet["hashtags"] = all_hashtags
+                #mentions
+                result_mention = []
+                mentions = x['user_mentions']
+                if len(mentions)>0:
+                    for mention in mentions:
+                        result_mention.append(mention['screen_name'])
+                    single_tweet["mentions"] = result_mention
                 
+                
+                ####
+                #urls
+                result_url = []
+                urls = x['urls']
+                if len(urls)>0:
+                    for url in urls:
+                        result_url.append(url['url'])
+                    single_tweet["urls"] = result_url
+                    
+                
+                
+                ####
                 date_str = parse(str(tweet.created_at))
                 time_obj = date_str.replace(second=0, microsecond=0, minute=0, hour=date_str.hour) + timedelta(
                 hours=date_str.minute // 30)
-                date_str = datetime.datetime.strftime(time_obj, '%Y-%m-%d %H:%M:%S')
+                date_str = datetime.datetime.strftime(time_obj, '%Y-%m-%dT%H:%M:%SZ')
 
                 #single_tweet["tweet_date"]= status.created_at.strftime("%y-%m-%dT%H:%M:%SZ")
                 #single_tweet["tweet_date"]= str(status.created_at)
                 single_tweet["tweet_date"] = date_str
                 tweets_data.append(single_tweet)
-                
-                
-                covid_list = ["covid", "vaccine", "quarantine", "masks","covid19","casos","ventilator","quarantine","salud","vaccines","vacuna","COVID-19"]
-               
-                if any(word in tweet.full_text for word in covid_list):
-                    # d= d-1                  
-                    c= c+1
+
+                if re.search("COVID", tweet.full_text):
+                    c =c+1                   
+
                 tweetid =tweet.id
             oldest_id = tweetid
-           
 
         print("covid",c)
-        print("count",d)
         return tweets_data
        
      #  raise NotImplementedError
@@ -103,51 +115,75 @@ class Twitter:
         '''
 
         tweets_data = []
-        cnt = 0
-            for status in tweepy.Cursor(self.api.search,q = key_name, lang = key_lang).items(100):
-                #print(status)
-                #status_dict = dict(vars(status))
-                #keys = status_dict.keys()
-                #for k in keys:
-                    #print(k)
-                #    single_tweet[k] = status_dict[k]
-                #user_dict = dict(vars(status_dict['user']))
-                single_tweet = {}
-                if re.search("RT",  status.text):
-                    continue
-                single_tweet["id"] = str(status.id)
-                single_tweet["verified"] = status.user.verified
-                if key_lang == "en":
-                    single_tweet["country"] = "USA"
-                elif key_lang == "hi":
-                    single_tweet["country"] =  "INDIA"
-                else:
-                    single_tweet["country"] = "MEXICO"
-                single_tweet["tweet_text"] = status.text
-                single_tweet["tweet_lang"] = key_lang
+        
+    
+        for status in tweepy.Cursor(self.api.search,q = key_name, lang = key_lang).items(300):
+            #print(status)
+            #status_dict = dict(vars(status))
+            #keys = status_dict.keys()
+            #for k in keys:
+                #print(k)
+            #    single_tweet[k] = status_dict[k]
+            #user_dict = dict(vars(status_dict['user']))
+            
+            single_tweet = {}
+            single_tweet["id"] = str(status.id)
+            single_tweet["verified"] = status.user.verified
+            if key_lang == "en":
+                single_tweet["country"] = "USA"
+            elif key_lang == "hi":
+                single_tweet["country"] =  "INDIA"
+            else:
+                single_tweet["country"] = "MEXICO"
+            single_tweet["tweet_text"] = status.text
+            single_tweet["tweet_lang"] = key_lang
 
+            
+            
+            x = status.entities
+            y = x['hashtags']
+            count_hashtags = len(y)
+            all_hashtags = []
+            if count_hashtags>0:
+                for hashtag in y:
+                    hash_text = hashtag['text']
+                    all_hashtags.append(hash_text)
+
+            single_tweet["hashtags"] = all_hashtags
+            
+            
+            #mentions
+            result_mention = []
+            mentions = x['user_mentions']
+            if len(mentions)>0:
+                for mention in mentions:
+                    result_mention.append(mention['screen_name'])
+                single_tweet["mentions"] = result_mention
                 
                 
-                x = status.entities
-                y = x['hashtags']
-                count_hashtags = len(y)
-                all_hashtags = []
-                if count_hashtags>0:
-                    for hashtag in y:
-                        hash_text = hashtag['text']
-                        all_hashtags.append(hash_text)
-
-                single_tweet["hashtags"] = all_hashtags
+            ####
+            #urls
+            result_url = []
+            urls = x['urls']
+            if len(urls)>0:
+                for url in urls:
+                    result_url.append(url['url'])
+                single_tweet["urls"] = result_url
+                    
                 
-                date_str = parse(str(status.created_at))
-                time_obj = date_str.replace(second=0, microsecond=0, minute=0, hour=date_str.hour) + timedelta(
-                hours=date_str.minute // 30)
-                date_str = datetime.datetime.strftime(time_obj, '%Y-%m-%d %H:%M:%S')
+                
+                ####
+            
+            
+            date_str = parse(str(status.created_at))
+            time_obj = date_str.replace(second=0, microsecond=0, minute=0, hour=date_str.hour) + timedelta(
+            hours=date_str.minute // 30)
+            date_str = datetime.datetime.strftime(time_obj, '%Y-%m-%dT%H:%M:%SZ')
 
-                #single_tweet["tweet_date"]= status.created_at.strftime("%y-%m-%dT%H:%M:%SZ")
-                #single_tweet["tweet_date"]= str(status.created_at)
-                single_tweet["tweet_date"] = date_str
-                tweets_data.append(single_tweet)
+            #single_tweet["tweet_date"]= status.created_at.strftime("%y-%m-%dT%H:%M:%SZ")
+            #single_tweet["tweet_date"]= str(status.created_at)
+            single_tweet["tweet_date"] = date_str
+            tweets_data.append(single_tweet)
 
 
         return tweets_data
