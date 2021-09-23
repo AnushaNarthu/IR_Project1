@@ -536,22 +536,20 @@ def main():
     
    
   ]
-    cnt=0
+    
     for i in range(len(pois)):
         if pois[i]["finished"] == 0:
             print(f"---------- collecting tweets for poi: {pois[i]['screen_name']}")
-            raw_tweets = twitter.get_tweets_by_poi_screen_name(pois[i]["screen_name"], pois[i]["count"])
-            
-            processed_tweets = []
-            for tw in raw_tweets:   
-                if re.search("RT",tw['tweet_text']):
-                    continue
-                processed_tweets.append(TWPreprocessor.preprocess(tw))
-                cnt = cnt + 1
-                #print(tw)
-                #print(cnt)
 
-            indexer.create_documents(processed_tweets)
+            raw_tweets = twitter.get_tweets_by_poi_screen_name(pois[i]['screen_name'])  # pass args as needed
+
+            processed_tweets = []
+            for tw in raw_tweets:
+                tweet_up = TWPreprocessor.preprocess(tw,pois[i],'poi')
+                if tweet_up !=None:
+                    processed_tweets.append(tweet_up)
+
+            #indexer.create_documents(processed_tweets)
 
             pois[i]["finished"] = 1
             pois[i]["collected"] = len(processed_tweets)
@@ -562,24 +560,19 @@ def main():
 
             save_file(processed_tweets, f"poi_{pois[i]['id']}.pkl")
             print("------------ process complete -----------------------------------")
-   
-    count = 0
+    
     for i in range(len(keywords)):
         if keywords[i]["finished"] == 0:
             print(f"---------- collecting tweets for keyword: {keywords[i]['name']}")
-            raw_tweets = twitter.get_tweets_by_lang_and_keyword(keywords[i]["count"], keywords[i]["name"], keywords[i]["lang"])
+
+            raw_tweets = twitter.get_tweets_by_lang_and_keyword(keywords[i]['name'])  # pass args as needed
 
             processed_tweets = []
-            
             for tw in raw_tweets:
-                if re.search("RT",tw['tweet_text']):
-                    continue
-                processed_tweets.append(TWPreprocessor.preprocess(tw))
-                count = count + 1
-                #print(tw)
-                #print(count)
+                tweet_up = TWPreprocessor.preprocess(tw,pois[i],'keyword')
+                if tweet_up !=None:
+                    processed_tweets.append(tweet_up)
 
-            
             indexer.create_documents(processed_tweets)
 
             keywords[i]["finished"] = 1
@@ -590,13 +583,14 @@ def main():
             })
 
             save_file(processed_tweets, f"keywords_{keywords[i]['id']}.pkl")
-            
+
             print("------------ process complete -----------------------------------")
 
     if reply_collection_knob:
         # Write a driver logic for reply collection, use the tweets from the data files for which the replies are to collected.
-        raise NotImplementedError
-    
-    return
+        pass
+        #raise NotImplementedError
+
+
 if __name__ == "__main__":
     main()
