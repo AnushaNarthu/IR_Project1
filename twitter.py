@@ -104,7 +104,7 @@ class Twitter:
 
         tweets_data = []
         cnt = 0
-        while cnt < 1000 :
+        while cnt < 100 :
             for status in tweepy.Cursor(self.api.search,q = key_name, lang = key_lang).items(100):
                 #print(status)
                 #status_dict = dict(vars(status))
