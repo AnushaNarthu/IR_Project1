@@ -543,7 +543,9 @@ def main():
             raw_tweets = twitter.get_tweets_by_poi_screen_name(pois[i]["screen_name"], pois[i]["count"])
             
             processed_tweets = []
-            for tw in raw_tweets:                
+            for tw in raw_tweets:   
+                if re.search("RT",tw['tweet_text']):
+                    continue
                 processed_tweets.append(TWPreprocessor.preprocess(tw))
                 cnt = cnt + 1
                 #print(tw)
@@ -570,6 +572,8 @@ def main():
             processed_tweets = []
             
             for tw in raw_tweets:
+                if re.search("RT",tw['tweet_text']):
+                    continue
                 processed_tweets.append(TWPreprocessor.preprocess(tw))
                 count = count + 1
                 #print(tw)
