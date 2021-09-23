@@ -37,7 +37,7 @@ def main():
     
     pois = [{"id": 1, "screen_name": "JoeBiden", "country": "USA", "count": 1, "finished": 0 , "reply_finished": 0, "collected": 0},
            {"id": 2, "screen_name": "CDCgov", "country": "USA", "count": 1, "finished": 0 , "reply_finished": 0, "collected": 0},
-           {"id": 3, "screen_name": "KamalaHarris", "country": "USA", "count": 1, "finished": 0 , "reply_finished": 0, "collected": 0},
+           {"id": 3, "screen_name": "drharshvardhan", "country": "INDIA", "count": 1, "finished": 0 , "reply_finished": 0, "collected": 0},
            {"id": 4, "screen_name": "SenatorLeahy", "country": "USA", "count": 1, "finished": 0 , "reply_finished": 0, "collected": 0},
            {"id": 5, "screen_name": "SecBecerra", "country": "USA", "count": 1, "finished": 0 , "reply_finished": 0, "collected": 0},
            {"id": 6, "screen_name": "narendramodi", "country": "INDIA", "count": 1, "finished": 0 , "reply_finished": 0, "collected": 0},
