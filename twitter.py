@@ -104,7 +104,6 @@ class Twitter:
 
         tweets_data = []
         cnt = 0
-        while cnt < 100 :
             for status in tweepy.Cursor(self.api.search,q = key_name, lang = key_lang).items(100):
                 #print(status)
                 #status_dict = dict(vars(status))
@@ -116,7 +115,6 @@ class Twitter:
                 single_tweet = {}
                 if re.search("RT",  status.text):
                     continue
-                cnt = cnt+1
                 single_tweet["id"] = str(status.id)
                 single_tweet["verified"] = status.user.verified
                 if key_lang == "en":
