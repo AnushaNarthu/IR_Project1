@@ -7,6 +7,7 @@ import tweepy
 import datetime
 from datetime import timedelta
 from dateutil.parser import parse
+from random import randint
 
 
 class Twitter:
