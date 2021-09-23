@@ -36,7 +36,7 @@ class Twitter:
         oldest_id = None
         tweets_data = []
         
-        while d < 1201 :
+        while d < 2000 :
             tweets = self.api.user_timeline(id =poi_screenname, count =100, max_id = oldest_id,tweet_mode='extended',)
             #print(len(tweets))
             for tweet in tweets:
