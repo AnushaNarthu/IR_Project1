@@ -35,26 +35,24 @@ class Twitter:
         d = 0
         oldest_id = None
         tweets_data = []
-        
-        while d < 2000 :
+        while d < 3000 :
             tweets = self.api.user_timeline(id =poi_screenname, count =100, max_id = oldest_id,tweet_mode='extended',)
             #print(len(tweets))
             for tweet in tweets:
-                
-                if re.search("RT",  tweet.full_text):
-                   continue
                 single_tweet = {}
                 d = d+1
+                
+                
 
                 single_tweet["id"] = str(tweet.id)
                 single_tweet["verified"] = tweet.user.verified
                 single_tweet["poi_name"] = tweet.user.screen_name
                 single_tweet["poi_id"] = tweet.user.id
-                if  tweet.lang  == "hi" or tweet.user.screen_name in ("narendramodi","AmitShah","KTRTRS","RahulGandhi","ArvindKejriwal","PMOIndia"):
-                    single_tweet["country"] = "INDIA"
-                elif tweet.lang  == "en" :
-                    single_tweet["country"] =  "USA"
-                else:
+                if tweet.lang == "en" or tweet.user.screen_name in ("JoeBiden","GavinNewsom","CDCgov","HHSGov","sensanders","POTUS","WHO","SecBecerra","SenatorLeahy"):
+                    single_tweet["country"] = "USA"
+                if tweet.lang  == "hi" or tweet.user.screen_name in ("narendramodi","AmitShah","MoHFW_INDIA","AyushmanNHA","JPNadda","RahulGandhi","ArvindKejriwal","mansukhmandviya","rashtrapatibhvn","PMOIndia"):
+                    single_tweet["country"] =  "INDIA"
+                if tweet.lang  == "es" or tweet.user.screen_name in ("lopezobrador_","FelipeCalderon","PublicHealthMDC","SSalud_mx","GustavoMader","ManceraMiguelMX","osoriochong"):
                     single_tweet["country"] = "MEXICO"
                 single_tweet["tweet_text"] = tweet.full_text
                 single_tweet["tweet_lang"] = tweet.lang
@@ -68,34 +66,48 @@ class Twitter:
                     for hashtag in y:
                         hash_text = hashtag['text']
                         all_hashtags.append(hash_text)
-
-                single_tweet["hashtags"] = all_hashtags
+                    single_tweet["hashtags"] = all_hashtags
+                #mentions
+                result_mention = []
+                mentions = x['user_mentions']
+                if len(mentions)>0:
+                    for mention in mentions:
+                        result_mention.append(mention['screen_name'])
+                    single_tweet["mentions"] = result_mention
                 
+                
+                ####
+                #urls
+                result_url = []
+                urls = x['urls']
+                if len(urls)>0:
+                    for url in urls:
+                        result_url.append(url['url'])
+                    single_tweet["urls"] = result_url
+                    
+                
+                
+                ####
                 date_str = parse(str(tweet.created_at))
                 time_obj = date_str.replace(second=0, microsecond=0, minute=0, hour=date_str.hour) + timedelta(
                 hours=date_str.minute // 30)
-                date_str = datetime.datetime.strftime(time_obj, '%Y-%m-%d %H:%M:%S')
+                date_str = datetime.datetime.strftime(time_obj, '%Y-%m-%dT%H:%M:%SZ')
 
                 #single_tweet["tweet_date"]= status.created_at.strftime("%y-%m-%dT%H:%M:%SZ")
                 #single_tweet["tweet_date"]= str(status.created_at)
                 single_tweet["tweet_date"] = date_str
                 tweets_data.append(single_tweet)
-                
-                
-                covid_list = ["covid", "vaccine", "quarantine", "masks","covid19","casos","ventilator","quarantine","salud","vaccines","vacuna","COVID-19"]
-               
+                covid_list = ['quarentena', 'hospital', 'covidresources', 'rt-pcr', 'वैश्विकमहामारी', 'oxygen', 'सुरक्षित रहें', 'stayhomestaysafe', 'covid19', 'quarantine', 'मास्क', 'face mask', 'covidsecondwaveinindia', 'flattenthecurve', 'corona virus', 'wuhan', 'cierredeemergencia', 'autoaislamiento', 'sintomas', 'covid positive', 'casos', 'कोविड मृत्यु', 'स्वयं चुना एकांत', 'stay safe', '#deltavariant', 'covid symptoms', 'sarscov2', 'covidiots', 'brote', 'alcohol en gel', 'disease', 'asintomático', 'टीकाकरण', 'encierro', 'covidiot', 'covidappropriatebehaviour', 'fever', 'pandemia de covid-19', 'wearamask', 'flatten the curve', 'oxígeno', 'desinfectante', 'super-spreader', 'ventilador', 'coronawarriors', 'quedate en casa', 'mascaras', 'mascara facial', 'trabajar desde casa', 'संगरोध', 'immunity', 'स्वयं संगरोध', 'डेल्टा संस्करण', 'mask mandate', 'health', 'dogajkidoori', 'travelban', 'cilindro de oxígeno', 'covid', 'staysafe', 'variant', 'yomequedoencasa', 'doctor', 'एंटीबॉडी', 'दूसरी लहर', 'distancia social', 'मुखौटा', 'covid test', 'अस्पताल', 'covid deaths', 'कोविड19', 'muvariant', 'susanadistancia', 'personal protective equipment', 'remdisivir', 'quedateencasa', 'asymptomatic', 'social distancing', 'distanciamiento social', 'cdc', 'transmission', 'epidemic', 'social distance', 'herd immunity', 'transmisión', 'सैनिटाइज़र', 'indiafightscorona', 'surgical mask', 'facemask', 'desinfectar', 'वायरस', 'संक्रमण', 'symptoms', 'सामाजिक दूरी', 'covid cases', 'ppe', 'sars', 'autocuarentena', 'प्रक्षालक', 'breakthechain', 'stayhomesavelives', 'coronavirusupdates', 'sanitize', 'covidinquirynow', 'कोरोना', 'workfromhome', 'outbreak', 'flu', 'sanitizer', 'distanciamientosocial', 'variante', 'कोविड 19', 'कोविड-19', 'covid pneumonia', 'कोविड', 'pandemic', 'icu', 'वाइरस', 'contagios', 'वेंटिलेटर', 'washyourhands', 'n95', 'stayhome', 'lavadodemanos', 'fauci', 'रोग प्रतिरोधक शक्ति', 'maskmandate', 'डेल्टा', 'कोविड महामारी', 'third wave', 'epidemia', 'fiebre', 'मौत', 'travel ban', 'फ़्लू', 'muerte', 'स्वच्छ', 'washhands', 'enfermedad', 'contagio', 'infección', 'faceshield', 'self-quarantine', 'remdesivir', 'oxygen cylinder', 'mypandemicsurvivalplan', 'कोविड के केस', 'delta variant', 'wuhan virus', 'लक्षण', 'corona', 'maskup', 'gocoronago', 'death', 'curfew', 'socialdistance', 'second wave', 'máscara', 'stayathome', 'positive', 'lockdown', 'propagación en la comunidad', 'तीसरी लहर', 'aislamiento', 'rtpcr', 'coronavirus', 'variante delta', 'distanciasocial', 'cubrebocas', 'घर पर रहें', 'socialdistancing', 'covidwarriors', 'प्रकोप', 'covid-19', 'stay home', 'संक्रमित', 'jantacurfew', 'cowin', 'कोरोनावाइरस', 'virus', 'distanciamiento', 'cuarentena', 'indiafightscovid19', 'healthcare', 'natocorona', 'मास्क पहनें', 'delta', 'ऑक्सीजन', 'wearmask', 'कोरोनावायरस', 'ventilator', 'pneumonia', 'maskupindia', 'ppe kit', 'sars-cov-2', 'testing', 'fightagainstcovid19', 'महामारी', 'नियंत्रण क्षेत्र', 'who', 'mask', 'pandemia', 'deltavariant', 'वैश्विक महामारी', 'रोग', 'síntomas', 'work from home', 'antibodies', 'masks', 'confinamiento', 'flattening the curve', 'मुखौटा जनादेश', 'thirdwave', 'mascarilla', 'usacubrebocas', 'covidemergency', 'inmunidad', 'cierre de emergencia', 'self-isolation', 'स्वास्थ्य सेवा', 'सोशल डिस्टन्सिंग', 'isolation', 'cases', 'community spread', 'unite2fightcorona', 'oxygencrisis', 'containment zones', 'homequarantine', 'स्पर्शोन्मुख', 'लॉकडाउन', 'hospitalización', 'incubation period']
+                #if re.search("COVID", tweet.full_text):
+                 #   c =c+1                   
                 if any(word in tweet.full_text for word in covid_list):
-                    # d= d-1                  
-                    c= c+1
-                tweetid =tweet.id
+                    c = c+1
+                    ####get replies#######################################################
+                    tweetid =tweet.id
             oldest_id = tweetid
-           
 
         print("covid",c)
-        print("count",d)
         return tweets_data
-       
-     #  raise NotImplementedError
 
     def get_tweets_by_lang_and_keyword(self,key_count,key_name,key_lang):
         '''
@@ -104,53 +116,75 @@ class Twitter:
         '''
 
         tweets_data = []
-        cnt = 0
-        while cnt < 102 :
-            for status in tweepy.Cursor(self.api.search,q = key_name, lang = key_lang).items(100):
-                #print(status)
-                #status_dict = dict(vars(status))
-                #keys = status_dict.keys()
-                #for k in keys:
-                    #print(k)
-                #    single_tweet[k] = status_dict[k]
-                #user_dict = dict(vars(status_dict['user']))
-                single_tweet = {}
-                if re.search("RT",  status.text):
-                    continue
-                cnt = cnt+1
-                single_tweet["id"] = str(status.id)
-                single_tweet["verified"] = status.user.verified
-                if key_lang == "en":
-                    single_tweet["country"] = "USA"
-                elif key_lang == "hi":
-                    single_tweet["country"] =  "INDIA"
-                else:
-                    single_tweet["country"] = "MEXICO"
-                single_tweet["tweet_text"] = status.text
-                single_tweet["tweet_lang"] = key_lang
+        
+    
+        for status in tweepy.Cursor(self.api.search,q = key_name, lang = key_lang).items(300):
+            #print(status)
+            #status_dict = dict(vars(status))
+            #keys = status_dict.keys()
+            #for k in keys:
+                #print(k)
+            #    single_tweet[k] = status_dict[k]
+            #user_dict = dict(vars(status_dict['user']))
+            
+            single_tweet = {}
+            single_tweet["id"] = str(status.id)
+            single_tweet["verified"] = status.user.verified
+            if key_lang == "en":
+                single_tweet["country"] = "USA"
+            elif key_lang == "hi":
+                single_tweet["country"] =  "INDIA"
+            else:
+                single_tweet["country"] = "MEXICO"
+            single_tweet["tweet_text"] = status.text
+            single_tweet["tweet_lang"] = key_lang
 
+            
+            
+            x = status.entities
+            y = x['hashtags']
+            count_hashtags = len(y)
+            all_hashtags = []
+            if count_hashtags>0:
+                for hashtag in y:
+                    hash_text = hashtag['text']
+                    all_hashtags.append(hash_text)
+
+            single_tweet["hashtags"] = all_hashtags
+            
+            
+            #mentions
+            result_mention = []
+            mentions = x['user_mentions']
+            if len(mentions)>0:
+                for mention in mentions:
+                    result_mention.append(mention['screen_name'])
+                single_tweet["mentions"] = result_mention
                 
                 
-                x = status.entities
-                y = x['hashtags']
-                count_hashtags = len(y)
-                all_hashtags = []
-                if count_hashtags>0:
-                    for hashtag in y:
-                        hash_text = hashtag['text']
-                        all_hashtags.append(hash_text)
-
-                single_tweet["hashtags"] = all_hashtags
+            ####
+            #urls
+            result_url = []
+            urls = x['urls']
+            if len(urls)>0:
+                for url in urls:
+                    result_url.append(url['url'])
+                single_tweet["urls"] = result_url
+                    
                 
-                date_str = parse(str(status.created_at))
-                time_obj = date_str.replace(second=0, microsecond=0, minute=0, hour=date_str.hour) + timedelta(
-                hours=date_str.minute // 30)
-                date_str = datetime.datetime.strftime(time_obj, '%Y-%m-%d %H:%M:%S')
+                
+                ####
+            
+            
+            date_str = parse(str(status.created_at))
+            time_obj = date_str.replace(second=0, microsecond=0, minute=0, hour=date_str.hour) + timedelta(
+            hours=date_str.minute // 30)
+            date_str = datetime.datetime.strftime(time_obj, '%Y-%m-%dT%H:%M:%SZ')
 
-                #single_tweet["tweet_date"]= status.created_at.strftime("%y-%m-%dT%H:%M:%SZ")
-                #single_tweet["tweet_date"]= str(status.created_at)
-                single_tweet["tweet_date"] = date_str
-                tweets_data.append(single_tweet)
+            #single_tweet["tweet_date"]= status.created_at.strftime("%y-%m-%dT%H:%M:%SZ")
+            #single_tweet["tweet_date"]= str(status.created_at)
+            single_tweet["tweet_date"] = date_str
+            tweets_data.append(single_tweet)
 
 
         return tweets_data
