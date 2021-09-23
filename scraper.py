@@ -1,9 +1,9 @@
 import json
-import re
 import pandas as pd
 from twitter import Twitter
 from tweet_preprocessor import TWPreprocessor
 from indexer import Indexer
+import re
 
 reply_collection_knob = False
 
@@ -904,11 +904,18 @@ def main():
             raw_tweets = twitter.get_tweets_by_poi_screen_name(pois[i]["screen_name"], pois[i]["count"])
             
             processed_tweets = []
-            for tw in raw_tweets:                
+            for tw in raw_tweets:
+                
+                if re.search("RT", tw['tweet_text']):
+                   continue
+                key_lang = tw["tweet_lang"]
+                if key_lang == "en":
+                    count_en = count_en + 1
+                elif key_lang == "hi":
+                    count_hi = count_hi + 1
+                else:
+                    count_es = count_es +1
                 processed_tweets.append(TWPreprocessor.preprocess(tw))
-                cnt = cnt + 1
-                #print(tw)
-                #print(cnt)
 
             indexer.create_documents(processed_tweets)
 
@@ -921,8 +928,8 @@ def main():
 
             save_file(processed_tweets, f"poi_{pois[i]['id']}.pkl")
             print("------------ process complete -----------------------------------")
-   
-    count = 0
+    
+    
     for i in range(len(keywords)):
         if keywords[i]["finished"] == 0:
             print(f"---------- collecting tweets for keyword: {keywords[i]['name']}")
@@ -931,10 +938,19 @@ def main():
             processed_tweets = []
             
             for tw in raw_tweets:
+                if re.search("RT", tw['tweet_text']):
+                   continue
+                key_lang = tw["tweet_lang"]
+                if key_lang == "en":
+                    count_en = count_en + 1
+                elif key_lang == "hi":
+                    count_hi = count_hi + 1
+                else:
+                    count_es = count_es +1
                 processed_tweets.append(TWPreprocessor.preprocess(tw))
                 count = count + 1
                 #print(tw)
-                #print(count)
+            print(count)
 
             
             indexer.create_documents(processed_tweets)
@@ -949,11 +965,17 @@ def main():
             save_file(processed_tweets, f"keywords_{keywords[i]['id']}.pkl")
             
             print("------------ process complete -----------------------------------")
-
+    
+            print("count_en"+str(count_en))
+            print("count_en"+str(count_hi))
+            print("count_en"+str(count_es))
+    
     if reply_collection_knob:
         # Write a driver logic for reply collection, use the tweets from the data files for which the replies are to collected.
         raise NotImplementedError
+    
 
 
+    return
 if __name__ == "__main__":
     main()
