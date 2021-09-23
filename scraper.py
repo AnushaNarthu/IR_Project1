@@ -34,7 +34,9 @@ def main():
     indexer = Indexer()
     twitter = Twitter()
 
-    
+    count_en = 0
+    count_hi = 0
+    count_es = 0
     pois = [{"id": 1, "screen_name": "JoeBiden", "country": "USA", "count": 1, "finished": 0 , "reply_finished": 0, "collected": 0},
            {"id": 2, "screen_name": "CDCgov", "country": "USA", "count": 1, "finished": 0 , "reply_finished": 0, "collected": 0},
            {"id": 3, "screen_name": "GavinNewsom", "country": "USA", "count": 1, "finished": 0 , "reply_finished": 0, "collected": 0},
