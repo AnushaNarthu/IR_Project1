@@ -54,13 +54,14 @@ def main():
             {"id": 17, "screen_name": "GovLarryHogan", "country": "USA", "count": 1, "finished": 0 , "reply_finished": 0, "collected": 0},
             {"id": 18, "screen_name": "AyushmanNHA", "country": "INDIA", "count": 1, "finished": 0 , "reply_finished": 0, "collected": 0},
             {"id": 19, "screen_name": "MoHFW_INDIA", "country": "INDIA", "count": 1, "finished": 0 , "reply_finished": 0, "collected": 0},
-            {"id": 20, "screen_name": "KamalaHarris", "country": "USA", "count": 1, "finished": 0 , "reply_finished": 0, "collected": 0},
+            {"id": 20, "screen_name": "WHO", "country": "USA", "count": 1, "finished": 0 , "reply_finished": 0, "collected": 0},
             {"id": 21, "screen_name": "POTUS", "country": "USA", "count": 1, "finished": 0 , "reply_finished": 0, "collected": 0},
             {"id": 22, "screen_name": "SecBecerra", "country": "USA", "count": 1, "finished": 0 , "reply_finished": 0, "collected": 0},
             {"id": 23, "screen_name": "SenatorLeahy", "country": "USA", "count": 1, "finished": 0 , "reply_finished": 0, "collected": 0},
             {"id": 24, "screen_name": "mansukhmandviya", "country": "INDIA", "count": 1, "finished": 0 , "reply_finished": 0, "collected": 0},
             {"id": 25, "screen_name": "rashtrapatibhvn", "country": "INDIA", "count": 1, "finished": 0 , "reply_finished": 0, "collected": 0},
-            {"id": 26, "screen_name": "PMOIndia", "country": "INDIA", "count": 1, "finished": 0 , "reply_finished": 0, "collected": 0}]
+            {"id": 26, "screen_name": "PublicHealthMDC", "country": "MEXICO", "count": 1, "finished": 0 , "reply_finished": 0, "collected": 0},
+            {"id": 27, "screen_name": "PMOIndia", "country": "INDIA", "count": 1, "finished": 0 , "reply_finished": 0, "collected": 0}]
     #keywords = config["keywords"]
     keywords = [
     {
