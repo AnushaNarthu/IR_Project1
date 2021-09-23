@@ -33,7 +33,7 @@ def main():
     config = read_config()
     indexer = Indexer()
     twitter = Twitter()
-
+    count = 0
     count_en = 0
     count_hi = 0
     count_es = 0
