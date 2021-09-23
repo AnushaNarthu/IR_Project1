@@ -38,7 +38,7 @@ def main():
     pois = [{"id": 1, "screen_name": "JoeBiden", "country": "USA", "count": 1, "finished": 0 , "reply_finished": 0, "collected": 0},
            {"id": 2, "screen_name": "CDCgov", "country": "USA", "count": 1, "finished": 0 , "reply_finished": 0, "collected": 0},
            {"id": 3, "screen_name": "GavinNewsom", "country": "USA", "count": 1, "finished": 0 , "reply_finished": 0, "collected": 0},
-           {"id": 4, "screen_name": "POTUS", "country": "USA", "count": 1, "finished": 0 , "reply_finished": 0, "collected": 0},
+           {"id": 4, "screen_name": "HHSGov", "country": "USA", "count": 1, "finished": 0 , "reply_finished": 0, "collected": 0},
            {"id": 5, "screen_name": "sensanders", "country": "USA", "count": 1, "finished": 0 , "reply_finished": 0, "collected": 0},
            {"id": 6, "screen_name": "narendramodi", "country": "INDIA", "count": 1, "finished": 0 , "reply_finished": 0, "collected": 0},
            {"id": 7, "screen_name": "AmitShah", "country": "INDIA", "count": 1, "finished": 0 , "reply_finished": 0, "collected": 0},
@@ -47,11 +47,20 @@ def main():
             {"id": 10, "screen_name": "ArvindKejriwal", "country": "INDIA", "count": 1, "finished": 0 , "reply_finished": 0, "collected": 0},
             {"id":11, "screen_name": "osoriochong", "country": "MEXICO", "count": 1, "finished": 0 , "reply_finished": 0, "collected": 0},
             {"id": 12, "screen_name": "FelipeCalderon", "country": "MEXICO", "count": 1, "finished": 0 , "reply_finished": 0, "collected": 0},
-            {"id": 13, "screen_name": "lopezobrador_", "country": "MEXICO", "count": 1, "finished": 0 , "reply_finished": 0, "collected": 0},
-            {"id": 14, "screen_name": "GustavoMadero", "country": "MEXICO", "count": 1, "finished": 0 , "reply_finished": 0, "collected": 0},
-            {"id": 15, "screen_name": "ManceraMiguelMX", "country": "MEXICO", "count": 1, "finished": 0 , "reply_finished": 0, "collected": 0},
-            {"id": 16, "screen_name": "GovLarryHogan", "country": "USA", "count": 1, "finished": 0 , "reply_finished": 0, "collected": 0},
-            {"id": 17, "screen_name": "PMOIndia", "country": "INDIA", "count": 1, "finished": 0 , "reply_finished": 0, "collected": 0}]
+            {"id": 13, "screen_name": "SSalud_mx", "country": "MEXICO", "count": 1, "finished": 0 , "reply_finished": 0, "collected": 0},
+            {"id": 14, "screen_name": "lopezobrador_", "country": "MEXICO", "count": 1, "finished": 0 , "reply_finished": 0, "collected": 0},
+            {"id": 15, "screen_name": "GustavoMadero", "country": "MEXICO", "count": 1, "finished": 0 , "reply_finished": 0, "collected": 0},
+            {"id": 16, "screen_name": "ManceraMiguelMX", "country": "MEXICO", "count": 1, "finished": 0 , "reply_finished": 0, "collected": 0},
+            {"id": 17, "screen_name": "GovLarryHogan", "country": "USA", "count": 1, "finished": 0 , "reply_finished": 0, "collected": 0},
+            {"id": 18, "screen_name": "AyushmanNHA", "country": "INDIA", "count": 1, "finished": 0 , "reply_finished": 0, "collected": 0},
+            {"id": 19, "screen_name": "MoHFW_INDIA", "country": "INDIA", "count": 1, "finished": 0 , "reply_finished": 0, "collected": 0},
+            {"id": 20, "screen_name": "KamalaHarris", "country": "USA", "count": 1, "finished": 0 , "reply_finished": 0, "collected": 0},
+            {"id": 21, "screen_name": "POTUS", "country": "USA", "count": 1, "finished": 0 , "reply_finished": 0, "collected": 0},
+            {"id": 22, "screen_name": "SecBecerra", "country": "USA", "count": 1, "finished": 0 , "reply_finished": 0, "collected": 0},
+            {"id": 23, "screen_name": "SenatorLeahy", "country": "USA", "count": 1, "finished": 0 , "reply_finished": 0, "collected": 0},
+            {"id": 24, "screen_name": "mansukhmandviya", "country": "INDIA", "count": 1, "finished": 0 , "reply_finished": 0, "collected": 0},
+            {"id": 25, "screen_name": "rashtrapatibhvn", "country": "INDIA", "count": 1, "finished": 0 , "reply_finished": 0, "collected": 0},,
+            {"id": 26, "screen_name": "PMOIndia", "country": "INDIA", "count": 1, "finished": 0 , "reply_finished": 0, "collected": 0}]
     #keywords = config["keywords"]
     keywords = [
     {
